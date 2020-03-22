@@ -70,12 +70,8 @@ struct ecmcPluginData pluginDataDef = {
   // Optional func that will be called each rt cycle. NULL if not definded.
   .realtimeFnc = exampleRealtime,
   // Allow max ECMC_PLUGIN_MAX_FUNC_COUNT custom funcs
-  .funcs =
-   {  
-       /* Note max ECMC_PLUGIN_MAX_PLC_FUNC_COUNT funcs allowed*/
-      
-      /*----customPlcFunc1----*/
-      { 
+  .funcs[0] =      
+      { /*----customPlcFunc1----*/
         // Function name
         .funcName = "ex_customPlcFunc1",
         // Number of arguments in the function prototytpe
@@ -93,9 +89,8 @@ struct ecmcPluginData pluginDataDef = {
         .funcArg6 = NULL,
         .funcArg6 = NULL
       },
-
-      /*----customPlcFunc2----*/
-      {
+    .funcs[1] =
+      { /*----customPlcFunc2----*/
         // Function name
         .funcName = "ex_customPlcFunc2",
         // Number of arguments in the function prototytpe
@@ -113,8 +108,7 @@ struct ecmcPluginData pluginDataDef = {
         .funcArg6 = NULL,
         .funcArg6 = NULL
       },
-      {0} //last element set all to zero..
-   }
+      .funcs[2] = {0} //last element set all to zero..
 };
 
 // Register plugin data
