@@ -45,13 +45,13 @@ int exampleRealtime(int ecmcError)
 
 double customPlcFunc1(double arg1, double arg2)
 {
-  printf("customPlcFunc1 %lf, %lf.\n",arg1,arg2);
+  //printf("customPlcFunc1 %lf, %lf.\n",arg1,arg2);
   return arg1 * arg2;
 }
 
 double customPlcFunc2(double arg1, double arg2, double arg3)
 {
-  printf("customPlcFunc2 %lf, %lf, %lf.\n",arg1,arg2,arg3);
+  //printf("customPlcFunc2 %lf, %lf, %lf.\n",arg1,arg2,arg3);
   return arg1 * arg2 * arg3;
 }
 
