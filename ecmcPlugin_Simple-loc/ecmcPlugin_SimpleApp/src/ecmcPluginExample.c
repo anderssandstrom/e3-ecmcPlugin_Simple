@@ -12,6 +12,7 @@
 
 #include <stdio.h>
 #include "ecmcPluginDefs.h"
+
 #define ECMC_EXAMPLE_PLUGIN_VERSION 1
 
 /** Optional. 

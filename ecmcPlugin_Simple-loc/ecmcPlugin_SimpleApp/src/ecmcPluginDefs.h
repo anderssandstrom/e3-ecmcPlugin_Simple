@@ -22,7 +22,7 @@
 
 // Structure for defining one custom plc function
 struct ecmcOnePlcFunc {
-  // Function name
+  // Function name (this is the name you use in ecmc plc-code)
   const char *funcName;
   // Number of arguments in the function prototytpe
   int argCount;
@@ -61,9 +61,9 @@ struct ecmcPluginData {
   struct ecmcOnePlcFunc funcs[ECMC_PLUGIN_MAX_PLC_FUNC_COUNT];
 };
 
-#define ecmc_plugin_register(pluginData) \
-    struct ecmcPluginData *_plugin_get_data(void) {\
-        return &pluginData;\
-    }
+#define ecmc_plugin_register(pluginData)             \
+    struct ecmcPluginData *_plugin_get_data(void) {  \
+        return &pluginData;                          \
+    }                                                \
 
 #endif  /* ECMC_PLUGIN_DEFS_H_ */
