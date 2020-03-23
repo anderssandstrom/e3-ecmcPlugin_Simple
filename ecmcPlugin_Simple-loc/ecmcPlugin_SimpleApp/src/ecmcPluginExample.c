@@ -15,17 +15,16 @@
 #define ECMC_EXAMPLE_PLUGIN_VERSION 1
 
 /** Optional. 
- *  Will be called once at load.
+ *  Will be called once just before ecmc goes into realtime mode.
  *  Return value other than 0 will be considered error.
- *  ecmcRefs will be used to pass ecmc objects to lib
  **/
-int exampleConstruct(void* ecmcRefs)
+int exampleConstruct(void)
 {
   printf("exampleConstruct...\n");
   return 0;
 }
 
-/** Optional. 
+/** Optional function.
  *  Will be called once at unload.
  **/
 void exampleDestruct(void)
@@ -33,8 +32,10 @@ void exampleDestruct(void)
   printf("exampleDestruct...\n");
 }
 
-/** Optional. 
+/** Optional function.
  *  Will be called each realtime cycle if definded
+ *  ecmcError: Error code of ecmc. Makes it posible for 
+ *  this plugin to react on ecmc errors
  *  Return value other than 0 will be considered error.
  **/
 int exampleRealtime(int ecmcError)
@@ -43,19 +44,40 @@ int exampleRealtime(int ecmcError)
   return 0;
 }
 
+/** Optional function.
+ *  Will be called once just before going to realtime mode
+ *  Return value other than 0 will be considered error.
+ *  ecmcRefs will be used to pass ecmc objects to lib
+ **/
+int exampleEnterRT(void* ecmcRefs){
+  printf("exampleEnterRT...\n");
+  return 0;
+}
+
+/** Optional function.
+ *  Will be called once just before leaving realtime mode
+ *  Return value other than 0 will be considered error.
+ **/
+int exampleExitRT(void){
+  printf("exampleExitRT...\n");
+  return 0;
+}
+
+/** Optional plc function*/
 double customPlcFunc1(double arg1, double arg2)
 {
-  //printf("customPlcFunc1 %lf, %lf.\n",arg1,arg2);
+  printf("customPlcFunc1 %lf, %lf.\n",arg1,arg2);
   return arg1 * arg2;
 }
 
+/** Optional plc function*/
 double customPlcFunc2(double arg1, double arg2, double arg3)
 {
-  //printf("customPlcFunc2 %lf, %lf, %lf.\n",arg1,arg2,arg3);
+  printf("customPlcFunc2 %lf, %lf, %lf.\n",arg1,arg2,arg3);
   return arg1 * arg2 * arg3;
 }
 
-// Compile data for lib
+// Compile data for lib so ecmc now what to use
 struct ecmcPluginData pluginDataDef = {
   // Name 
   .name = "ecmcExamplePlugin",
@@ -69,11 +91,16 @@ struct ecmcPluginData pluginDataDef = {
   .destructFnc = exampleDestruct,
   // Optional func that will be called each rt cycle. NULL if not definded.
   .realtimeFnc = exampleRealtime,
+  // Optional func that will be called once just before enter realtime mode
+  .enterRealTimeFnc = exampleEnterRT,
+  // Optional func that will be called once just before exit realtime mode
+  .exitRealTimeFnc = exampleExitRT,
+
   // Allow max ECMC_PLUGIN_MAX_FUNC_COUNT custom funcs
   .funcs[0] =      
       { /*----customPlcFunc1----*/
-        // Function name
-        .funcName = "ex_customPlcFunc1",
+        // Function name (this is the name you use in ecmc plc-code)
+        .funcName = "ex_plugin_func_1",
         // Number of arguments in the function prototytpe
         .argCount = 2,
         /**
@@ -83,7 +110,7 @@ struct ecmcPluginData pluginDataDef = {
         **/
         .funcArg0 = NULL,
         .funcArg1 = NULL,
-        .funcArg2 = customPlcFunc1, // Func has 2 args
+        .funcArg2 = customPlcFunc1, // Func 1 has 2 args
         .funcArg3 = NULL,
         .funcArg4 = NULL,
         .funcArg6 = NULL,
@@ -91,8 +118,8 @@ struct ecmcPluginData pluginDataDef = {
       },
     .funcs[1] =
       { /*----customPlcFunc2----*/
-        // Function name
-        .funcName = "ex_customPlcFunc2",
+        // Function name (this is the name you use in ecmc plc-code)
+        .funcName = "ex_plugin_func_2",
         // Number of arguments in the function prototytpe
         .argCount = 3,
         /**
@@ -103,7 +130,7 @@ struct ecmcPluginData pluginDataDef = {
         .funcArg0 = NULL,
         .funcArg1 = NULL,
         .funcArg2 = NULL,
-        .funcArg3 = customPlcFunc2, // Func has 3 args
+        .funcArg3 = customPlcFunc2, // Func 2 has 3 args
         .funcArg4 = NULL,
         .funcArg6 = NULL,
         .funcArg6 = NULL
