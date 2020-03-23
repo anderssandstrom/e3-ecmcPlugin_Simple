@@ -1,9 +1,10 @@
-
-e3-ecmcPlugin_Simple  
+e3-ecmcPlugin_Simple
 ======
 ESS Site-specific EPICS module : ecmcPlugin_Simple
 
-Simple Example illustrating a plugin for use with ecmc. Shows both use of callbacks and implementation of custom ecmc plc-functions.
+Example illustrating a plugin for use with ecmc.
+Shows use of callbacks and implementation, custom ecmc plc-functions and how to access the
+ecmcAsynPort object.
 
 # Interface
 The interface is defined in the structure ecmcPluginData in ecmcPluginDefs.h:
@@ -31,25 +32,44 @@ struct ecmcPluginData {
 ```
 ## Callbacks:
 
-### constructFnc (optional)
+### int  constructFnc(), optional
 This callback is called once when the plugin is loaded into ecmc. This is a good place to put code for any initialization needed in the plugin module.
 If not used then set "ecmcPluginData.constructFnc=NULL".
 
-### destructFnc (optional)
+Return value: 0 for success or error code.
+
+### void destructFnc(), optional
 This callback is called once when the plugin is unloaded. This is a good place to put cleanup code needed by the plugin module.
 If not used then set "ecmcPluginData.destructFnc=NULL".
 
-### realtimeFnc (optional)
+### int realtimeFnc(int ecmcErrorId), optional
 This callback is called once in each realtime loop (sync to ecmc). This is a good place to put any cyclic processing needed by the plugin module.
 If not used then set "ecmcPluginData.realtimeFnc=NULL".
 
-### realtimeEnterFnc (optional)
+Parameters: ecmcErrorId: reflects the current errorstate of ecmc.
+
+Return value: 0 for success or error code.
+
+### int realtimeEnterFnc(void* ecmcRefs), optional
 This callback is called once just before ecmc enters realtime mode (starts rt-thread). This is a good place to make any prepartions needed before cyclic processing starts.
 If not used then set "ecmcPluginData.enterRealTimeFnc=NULL".
 
-### realtimeExitFnc (optional)
+Parameters: ecmcRefs: ref to ecmcdata that can be cast to ecmcPluginDataRefs
+```
+struct ecmcPluginDataRefs {
+  double sampleTimeMS;
+  ecmcAsynPortDriver *ecmcAsynPort;
+};
+```
+IMPORTANT! This structure is only valid the time between calls of "realtimeEnterFnc()" and "realtimeExitFnc()".
+
+Return value: 0 for success or error code.
+
+### int realtimeExitFnc(), optional
 This callback is called once just before ecmc exits realtime mode (exits rt-thread).
 If not used then set "ecmcPluginData.exitRealTimeFnc=NULL".
+
+Return value: 0 for success or error code.
 
 ### Example:
 ```
