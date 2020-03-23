@@ -141,3 +141,26 @@ Example:
   
 ```
 Note: Only the funcArg${argCount} pointer will be used, so set the rest to NULL.
+
+## Dependencies
+
+### Simple plugins 
+
+Only the "ecmcPluginDefs.h" header is needed.
+
+### Advanced plugins 
+When using the "void* ecmcRefs" param (cast to ecmcPluginDataRefs)in the "realtimeEnterFnc()" these additional headers are needed:
+* from ecmc:
+  * ecmcAsynPortDriver.h
+  * ecmcAsynDataItem.h
+  * ecmcAsynPortDriverUtils.h
+  * ecmcDefinitions.h
+  * ecmcErrorsList.h
+  * ecmcPluginDataRefs.h
+* from asyn:
+  * asynPortDriver.h
+  
+Note: This define is needed in the plugin sources:
+```
+#define ECMC_IS_PLUGIN
+```
