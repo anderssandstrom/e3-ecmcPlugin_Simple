@@ -92,9 +92,9 @@ struct ecmcPluginData pluginDataDef = {
   // Optional func that will be called each rt cycle. NULL if not definded.
   .realtimeFnc = exampleRealtime,
   // Optional func that will be called once just before enter realtime mode
-  .enterRealTimeFnc = exampleEnterRT,
+  .realtimeEnterFnc = exampleEnterRT,
   // Optional func that will be called once just before exit realtime mode
-  .exitRealTimeFnc = exampleExitRT,
+  .realtimeExitFnc = exampleExitRT,
 
   // Allow max ECMC_PLUGIN_MAX_FUNC_COUNT custom funcs
   .funcs[0] =      
