@@ -29,7 +29,14 @@ where_am_I := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 include $(E3_REQUIRE_TOOLS)/driver.makefile
 include $(E3_REQUIRE_CONFIG)/DECOUPLE_FLAGS
 
-###
+ifneq ($(strip $(ASYN_DEP_VERSION)),)
+asyn_VERSION=$(ASYN_DEP_VERSION)
+endif
+
+ifneq ($(strip $(ECMC_DEP_VERSION)),)
+ecmc_VERSION=$(ECMC_DEP_VERSION)
+endif
+
 APP:=ecmcPlugin_SimpleApp
 APPDB:=$(APP)/Db
 APPSRC:=$(APP)/src

@@ -9,17 +9,17 @@
 *      Author: anderssandstrom
 *
 \*************************************************************************/
+#define ECMC_IS_PLUGIN
+#define ECMC_EXAMPLE_PLUGIN_VERSION 1
 
 #include <stdio.h>
 #include "ecmcPluginDefs.h"
-
-#define ECMC_EXAMPLE_PLUGIN_VERSION 1
 
 /** Optional. 
  *  Will be called once just before ecmc goes into realtime mode.
  *  Return value other than 0 will be considered error.
  **/
-int exampleConstruct(void)
+int exampleConstruct(char * configStr)
 {
   printf("exampleConstruct...\n");
   return 0;
@@ -50,7 +50,7 @@ int exampleRealtime(int ecmcError)
  *  Return value other than 0 will be considered error.
  *  ecmcRefs will be used to pass ecmc objects to lib
  **/
-int exampleEnterRT(void* ecmcRefs){
+int exampleEnterRT(void){
   printf("exampleEnterRT...\n");
   return 0;
 }
@@ -80,12 +80,16 @@ double customPlcFunc2(double arg1, double arg2, double arg3)
 
 // Compile data for lib so ecmc now what to use
 struct ecmcPluginData pluginDataDef = {
+   // Allways ECMC_PLUG_VERSION_MAGIC
+  .ifVersion = ECMC_PLUG_VERSION_MAGIC, 
   // Name 
   .name = "ecmcExamplePlugin",
+  // Description
+  .desc = "Simple plugin demo with 2 plc functions",
+    // Option description
+  .optionDesc = "No Options defined!",
   // Plugin version
   .version = ECMC_EXAMPLE_PLUGIN_VERSION,
-  // ECMC_PLUG_VERSION_MAGIC
-  .ifVersion = ECMC_PLUG_VERSION_MAGIC, 
   // Optional construct func, called once at load. NULL if not definded.
   .constructFnc = exampleConstruct,
   // Optional destruct func, called once at unload. NULL if not definded.
@@ -102,12 +106,11 @@ struct ecmcPluginData pluginDataDef = {
       { /*----customPlcFunc1----*/
         // Function name (this is the name you use in ecmc plc-code)
         .funcName = "ex_plugin_func_1",
-        // Number of arguments in the function prototytpe
-        .argCount = 2,
+        // Function description
+        .funcDesc = "double ex_plugin_func_1(arg0, arg1) : multiplies arg0 and arg1. Returns the value",
         /**
         * 7 different prototypes allowed (only doubles since reg in plc).
         * Only funcArg${argCount} func shall be assigned the rest set to NULL.
-        * funcArg${argCount}. These need to match. 
         **/
         .funcArg0 = NULL,
         .funcArg1 = NULL,
@@ -115,18 +118,21 @@ struct ecmcPluginData pluginDataDef = {
         .funcArg3 = NULL,
         .funcArg4 = NULL,
         .funcArg5 = NULL,
-        .funcArg6 = NULL
+        .funcArg6 = NULL,
+        .funcArg7 = NULL,
+        .funcArg8 = NULL,
+        .funcArg9 = NULL,
+        .funcArg10 = NULL,        
       },
     .funcs[1] =
       { /*----customPlcFunc2----*/
         // Function name (this is the name you use in ecmc plc-code)
         .funcName = "ex_plugin_func_2",
-        // Number of arguments in the function prototytpe
-        .argCount = 3,
+        // Function description
+        .funcDesc = "double ex_plugin_func_2(arg0, arg1, arg2) : multiplies arg0 arg1 and arg2. Returns the value",
         /**
         * 7 different prototypes allowed (only doubles since reg in plc).
         * Only funcArg${argCount} func shall be assigned the rest set to NULL.
-        * funcArg${argCount}. These need to match. 
         **/
         .funcArg0 = NULL,
         .funcArg1 = NULL,
@@ -134,9 +140,14 @@ struct ecmcPluginData pluginDataDef = {
         .funcArg3 = customPlcFunc2, // Func 2 has 3 args
         .funcArg4 = NULL,
         .funcArg5 = NULL,
-        .funcArg6 = NULL
+        .funcArg6 = NULL,
+        .funcArg7 = NULL,
+        .funcArg8 = NULL,
+        .funcArg9 = NULL,
+        .funcArg10 = NULL,        
       },
-      .funcs[2] = {0} //last element set all to zero..
+      .funcs[2] = {0},  //last element set all to zero..
+      .consts[0] = {0}, //last element set all to zero..
 };
 
 // Register plugin data
