@@ -12,8 +12,16 @@
 #define ECMC_IS_PLUGIN
 #define ECMC_EXAMPLE_PLUGIN_VERSION 1
 
+// only allow to load once
+#define ECMC_PLUGIN_ALLOW_MULTI_LOAD 0
+
+// Error codes
+#define ECMC_PLUGIN_ERROR_ALREADY_LOADED 1
+
 #include <stdio.h>
 #include "ecmcPluginDefs.h"
+
+static int    loaded         = 0;
 
 /** Optional. 
  *  Will be called once just before ecmc goes into realtime mode.
@@ -21,7 +29,17 @@
  **/
 int exampleConstruct(char * configStr)
 {
+    // Ensure that plugin is only loaded once
+  if(loaded && !ECMC_PLUGIN_ALLOW_MULTI_LOAD) {
+    printf("%s/%s:%d: Error: Module already loaded (0x%x).\n",__FILE__, __FUNCTION__,
+           __LINE__,ECMC_PLUGIN_ERROR_ALREADY_LOADED);
+    return ECMC_PLUGIN_ERROR_ALREADY_LOADED;
+  }
+
   printf("exampleConstruct...\n");
+
+  // Prevent loading more than once
+  loaded = 1;
   return 0;
 }
 
@@ -41,7 +59,7 @@ void exampleDestruct(void)
  **/
 int exampleRealtime(int ecmcError)
 {
-  printf("exampleRealtime...\n");
+  //printf("exampleRealtime...\n");
   return 0;
 }
 
