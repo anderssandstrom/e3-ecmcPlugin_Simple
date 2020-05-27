@@ -29,7 +29,7 @@ static int    loaded         = 0;
  **/
 int exampleConstruct(char * configStr)
 {
-    // Ensure that plugin is only loaded once
+  // Ensure that plugin is only loaded once
   if(loaded && !ECMC_PLUGIN_ALLOW_MULTI_LOAD) {
     printf("%s/%s:%d: Error: Module already loaded (0x%x).\n",__FILE__, __FUNCTION__,
            __LINE__,ECMC_PLUGIN_ERROR_ALREADY_LOADED);
@@ -140,7 +140,8 @@ struct ecmcPluginData pluginDataDef = {
         .funcArg7 = NULL,
         .funcArg8 = NULL,
         .funcArg9 = NULL,
-        .funcArg10 = NULL,        
+        .funcArg10 = NULL,
+        .funcGenericObj = NULL,
       },
     .funcs[1] =
       { /*----customPlcFunc2----*/
@@ -162,7 +163,8 @@ struct ecmcPluginData pluginDataDef = {
         .funcArg7 = NULL,
         .funcArg8 = NULL,
         .funcArg9 = NULL,
-        .funcArg10 = NULL,        
+        .funcArg10 = NULL,
+        .funcGenericObj = NULL,
       },
       .funcs[2] = {0},  //last element set all to zero..
       .consts[0] = {0}, //last element set all to zero..
