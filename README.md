@@ -1,6 +1,6 @@
-e3-ecmcPlugin_Simple
+e3-ecmc_plugin_simple
 ======
-ESS Site-specific EPICS module : ecmcPlugin_Simple
+ESS Site-specific EPICS module : ecmc_plugin_simple
 
 Example illustrating a plugin for use with ecmc.
 Shows use of callbacks and implementation, custom ecmc plc-functions and how to access the
